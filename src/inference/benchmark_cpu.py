@@ -83,8 +83,17 @@ if __name__ == "__main__":
     if os.path.exists(model_path):
         sess = create_optimized_cpu_session(model_path)
         metrics = benchmark_inference(sess)
-        print("\n--- Benchmark Results (x86_64 AVX2 CPU) ---")
+        print("\n--- FP32 Benchmark Results (x86_64 AVX2 CPU) ---")
         for k, v in metrics.items():
+            print(f"  {k}: {v}")
+
+        print("\n[+] Testing dynamic INT8 PTQ quantization...")
+        quant_path = "models/rtdetr_permissive_int8.onnx"
+        quantize_to_int8(model_path, quant_path)
+        quant_sess = create_optimized_cpu_session(quant_path)
+        quant_metrics = benchmark_inference(quant_sess)
+        print("\n--- INT8 Benchmark Results (x86_64 AVX2 CPU) ---")
+        for k, v in quant_metrics.items():
             print(f"  {k}: {v}")
     else:
         print(f"[!] Please generate the model first using export_onnx.py")

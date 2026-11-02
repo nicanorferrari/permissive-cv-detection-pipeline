@@ -3,6 +3,7 @@ torchvision>=0.17.0
 onnx>=1.15.0
 onnxruntime>=1.17.0
 onnxsim>=0.4.35
+onnxscript>=0.1.0
 numpy>=1.24.0,<2.0.0
 pillow>=10.0.0
 pyyaml>=6.0.1

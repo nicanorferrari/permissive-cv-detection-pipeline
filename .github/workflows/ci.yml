@@ -25,7 +25,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-          pip install onnx onnxruntime onnxsim numpy pillow pyyaml tqdm pip-licenses pytest
+          pip install onnx onnxruntime onnxsim onnxscript numpy pillow pyyaml tqdm pip-licenses pytest
 
       - name: Run Unit Tests
         run: |
