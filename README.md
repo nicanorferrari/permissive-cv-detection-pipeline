@@ -34,6 +34,7 @@ In commercial enterprise applications, license contamination poses severe legal 
 | Component | Standard Selection | Why It Is Chosen | Excluded Alternatives (Blocked) |
 | :--- | :--- | :--- | :--- |
 | **Detection Backbone** | `lyuwenyu/RT-DETR`<br/>`Peterande/D-FINE` | **Apache-2.0** reference implementation with clean PyTorch code and direct ONNX export. | `ultralytics/ultralytics` (**AGPL-3.0** / dual-license commercial). |
+| **Classifier Backbone** | `torchvision.models` (MobileNetV3 / ResNet) | **BSD-3-Clause** standard PyTorch classifiers for folder-per-class datasets. | Proprietary / copyleft vision models. |
 | **Data Augmentation** | `torchvision.transforms.v2` | **BSD-3-Clause** native PyTorch transforms supporting unified bounding box and mask augmentation without aspect distortion. | Recent `albumentations` / `albumentationsX` (**AGPL-3.0** / commercial restrictions). |
 | **Inference Runtime** | `onnxruntime` (CPU) | **MIT** license; official Microsoft multi-threaded runtime with AVX2 kernel dispatch. | Proprietary runtimes with telemetry. |
 
@@ -68,7 +69,32 @@ Targeting serverless CPU execution (Linux x86_64 with AVX2) requires careful con
 
 ---
 
-## 🛠️ 3. Distortion-Free Preprocessing
+## 📊 3. MLOps Contract: Automated Deployment Metrics (`metrics.json`)
+
+To seamlessly integrate into automated CI/CD and deployment gates, the pipeline outputs both the ONNX binary and a structured metadata contract (`models/deployment_metrics.json`):
+
+```json
+{
+  "contract_version": "1.0",
+  "model_family": "RT-DETR / D-FINE",
+  "license": "Apache-2.0",
+  "target_hardware": "Azure Functions (Linux x86_64, AVX2, CPU only)",
+  "onnx_runtime_version": "1.18.0",
+  "fp32_baseline": {
+    "model_size_mb": 40.78,
+    "metrics": { "mean_ms": 7.82, "p50_ms": 7.77, "fps": 127.8 }
+  },
+  "int8_quantized": {
+    "model_size_mb": 10.27,
+    "metrics": { "mean_ms": 40.84, "p50_ms": 38.82, "fps": 24.5 }
+  },
+  "gate_status": "READY_FOR_DEPLOYMENT"
+}
+```
+
+---
+
+## 🛠️ 4. Distortion-Free Preprocessing
 
 Detecting small objects in retail and manufacturing requires preserving the original aspect ratio without squashing or stretching:
 
@@ -96,14 +122,19 @@ source venv/bin/activate  # On Windows: .\venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### Export Model to ONNX
+### Export Models to ONNX
 ```bash
+# Export RT-DETR / D-FINE detection architecture
 python src/export/export_onnx.py
+
+# Export torchvision classification backbone
+python src/export/export_classifier.py
 ```
 
-### Run CPU Benchmark
+### Run CPU Benchmark & Generate Deployment Contract
 ```bash
 python src/inference/benchmark_cpu.py
+# Generates models/deployment_metrics.json
 ```
 
 ---

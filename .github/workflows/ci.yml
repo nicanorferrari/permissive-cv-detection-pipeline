@@ -38,4 +38,6 @@ jobs:
       - name: Verify ONNX Export & Benchmark Engine
         run: |
           python src/export/export_onnx.py
+          python src/export/export_classifier.py
           python src/inference/benchmark_cpu.py
+          cat models/deployment_metrics.json
