@@ -4,6 +4,13 @@ Configured for x86_64 AVX2 using ONNX Runtime with multi-threading tuning and IN
 """
 
 import time
+import sys
+import os
+
+if sys.platform.startswith("win"):
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
+
 import numpy as np
 import onnxruntime as ort
 import os

@@ -4,6 +4,12 @@ Pure Apache-2.0 / MIT implementation with onnxsim graph simplification.
 """
 
 import os
+import sys
+
+if sys.platform.startswith("win"):
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
+
 import torch
 import torch.nn as nn
 import onnx
