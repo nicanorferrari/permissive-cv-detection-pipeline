@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "permissive-cv-detection-pipeline"
+version = "0.1.0"
+description = "Permissive (Apache-2.0 / MIT) real-time object detection, ONNX export, and CPU inference optimization."
+readme = "README.md"
+authors = [{ name = "Sebastian Ferrari", email = "nicanor.ferrari@gmail.com" }]
+license = { text = "Apache-2.0" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: Apache Software License",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "torch>=2.2.0",
+    "torchvision>=0.17.0",
+    "onnx>=1.15.0",
+    "onnxruntime>=1.17.0",
+    "onnxsim>=0.4.35",
+    "numpy>=1.24.0,<2.0.0",
+    "pillow>=10.0.0",
+    "pyyaml>=6.0.1",
+]
